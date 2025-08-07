@@ -74,3 +74,6 @@ src/
 includes/Chatbot/
 includes/Services/Admin/
 includes/Anthropic/
+includes/Mistral/
+includes/Mock/
+includes/Perplexity/
