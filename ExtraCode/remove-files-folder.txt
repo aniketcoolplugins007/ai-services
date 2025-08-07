@@ -16,6 +16,9 @@ includes/Anthropic/
 includes/Mistral/
 includes/Mock/
 includes/Perplexity/
+includes/Google/Google_AI_Image_Generation_Model.php
+includes/OpenAI/OpenAI_AI_Image_Generation_Model.php
+includes/OpenAI/OpenAI_AI_Text_To_Speech_Model.php
 vendor/felixarntz/wp-oop-plugin-lib/src/Admin_Links/
 vendor/felixarntz/wp-oop-plugin-lib/src/Admin_Pages/
 vendor/felixarntz/wp-oop-plugin-lib/src/Admin_Pointers/
