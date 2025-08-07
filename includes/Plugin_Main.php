@@ -13,6 +13,8 @@ use Felix_Arntz\AI_Services\Anthropic\Anthropic_AI_Text_Generation_Model;
 use Felix_Arntz\AI_Services\Google\Google_AI_Image_Generation_Model;
 use Felix_Arntz\AI_Services\Google\Google_AI_Service;
 use Felix_Arntz\AI_Services\Google\Google_AI_Text_Generation_Model;
+use Felix_Arntz\AI_Services\Deepl\Deepl_AI_Service;
+use Felix_Arntz\AI_Services\Deepl\Deepl_AI_Text_Generation_Model;
 use Felix_Arntz\AI_Services\Mistral\Mistral_AI_Service;
 use Felix_Arntz\AI_Services\Mistral\Mistral_AI_Text_Generation_Model;
 use Felix_Arntz\AI_Services\Mock\Mock_AI_Image_Generation_Model;
@@ -268,6 +270,27 @@ class Plugin_Main implements With_Hooks {
 				'capabilities'    => AI_Capabilities::get_model_classes_capabilities(
 					array(
 						OpenAI_AI_Text_Generation_Model::class
+					)
+				),
+				'allow_override'  => false,
+			)
+		);
+		$this->services_api->register_service(
+			'deepl',
+			static function ( Service_Registration_Context $context ) {
+				return new Deepl_AI_Service(
+					$context->get_metadata(),
+					$context->get_authentication(),
+					$context->get_request_handler()
+				);
+			},
+			array(
+				'name'            => 'Deepl',
+				'credentials_url' => 'https://www.deepl.com/docs-api/translating-text/',
+				'type'            => Service_Type::CLOUD,
+				'capabilities'    => AI_Capabilities::get_model_classes_capabilities(
+					array(
+						Deepl_AI_Text_Generation_Model::class
 					)
 				),
 				'allow_override'  => false,
