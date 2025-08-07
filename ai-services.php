@@ -58,6 +58,7 @@ function ai_services_load() /* @phpstan-ignore-line */ {
 	$instance->add_hooks();
 
 	require_once plugin_dir_path( __FILE__ ) . 'includes/api.php';
+	require_once plugin_dir_path( __FILE__ ) . 'testing/ai-tab-shortcode.php';
 }
 
 /**
