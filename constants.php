@@ -32,18 +32,20 @@ function ai_services_register_autoloader() {
 	}
 
 	// Check for the built autoloader class map as that needs to be used for a production build.
-	$autoload_file             = plugin_dir_path( __FILE__ ) . 'includes/vendor/composer/autoload_classmap.php';
-	$third_party_autoload_file = plugin_dir_path( __FILE__ ) . 'third-party/vendor/composer/autoload_classmap.php';
-	if ( file_exists( $autoload_file ) && file_exists( $third_party_autoload_file ) ) {
-		require_once plugin_dir_path( __FILE__ ) . 'includes/Plugin_Autoloader.php';
+	$autoload_file             = plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
-		$class_name = 'Felix_Arntz\AI_Services\Plugin_Autoloader';
+	if ( file_exists( $autoload_file ) ) {
 
-		$instance = new $class_name( 'Felix_Arntz\AI_Services', $autoload_file );
-		spl_autoload_register( array( $instance, 'autoload' ), true, true );
+		require_once $autoload_file;
+		// require_once plugin_dir_path( __FILE__ ) . 'includes/Plugin_Autoloader.php';
 
-		$third_party_instance = new $class_name( 'Felix_Arntz\AI_Services_Dependencies', $third_party_autoload_file );
-		spl_autoload_register( array( $third_party_instance, 'autoload' ), true, true );
+		// $class_name = 'Felix_Arntz\AI_Services\Plugin_Autoloader';
+
+		// $instance = new $class_name( 'Felix_Arntz\AI_Services', $autoload_file );
+		// spl_autoload_register( array( $instance, 'autoload' ), true, true );
+
+		// $third_party_instance = new $class_name( 'Felix_Arntz\AI_Services_Dependencies', $third_party_autoload_file );
+		// spl_autoload_register( array( $third_party_instance, 'autoload' ), true, true );
 
 		$registered = true;
 		return true;
