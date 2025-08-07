@@ -62,4 +62,9 @@ temp/
 .Trashes
 .svn
 .env
-.wordpress.org
+.wordpress.org/
+.clineignore
+.clinerules/
+.github/
+docs/
+examples/
