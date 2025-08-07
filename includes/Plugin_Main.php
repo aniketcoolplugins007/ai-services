@@ -33,9 +33,9 @@ use Felix_Arntz\AI_Services\Services\Util\AI_Capabilities;
 use Felix_Arntz\AI_Services\XAI\XAI_AI_Image_Generation_Model;
 use Felix_Arntz\AI_Services\XAI\XAI_AI_Service;
 use Felix_Arntz\AI_Services\XAI\XAI_AI_Text_Generation_Model;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\With_Hooks;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Service_Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Hook_Registrar;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\With_Hooks;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Service_Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Hook_Registrar;
 
 /**
  * Plugin main class.
@@ -95,53 +95,8 @@ class Plugin_Main implements With_Hooks {
 	 */
 	public function add_hooks(): void {
 		$this->services_loader->add_hooks();
-		$this->maybe_install_data();
 		$this->add_cleanup_hooks();
 		$this->add_service_hooks();
-		$this->maybe_register_mock_service();
-	}
-
-	/**
-	 * Listens to the 'init' action and plugin activation to conditionally trigger the installation process.
-	 *
-	 * The installation will only happen if necessary, i.e. on most requests this will effectively do nothing.
-	 *
-	 * @since 0.1.0
-	 */
-	private function maybe_install_data(): void {
-		/*
-		 * Run plugin data installation/upgrade logic early on 'init' if necessary.
-		 * This is primarily used to run upgrade routines as necessary.
-		 * However, for network-wide plugin activation on a multisite this is also used to install the plugin data.
-		 * While intuitively the latter may fit better into the plugin activation hook, that approach has problems on
-		 * larger multisite installations.
-		 * The plugin installer class will ensure that the installation only runs if necessary.
-		 */
-		add_action(
-			'init',
-			function () {
-				if ( ! $this->container['current_user']->has_cap( 'activate_plugins' ) ) {
-					return;
-				}
-				$this->container['plugin_installer']->install();
-			},
-			0
-		);
-
-		/*
-		 * Plugin activation hook. This is only used to install the plugin data for a single site.
-		 * If activated for a multisite network, the plugin data is instead installed on 'init', per individual site,
-		 * since handling it all within the activation hook is not scalable.
-		 */
-		register_activation_hook(
-			$this->container['plugin_env']->main_file(),
-			function ( $network_wide ) {
-				if ( $network_wide ) {
-					return;
-				}
-				$this->container['plugin_installer']->install();
-			}
-		);
 	}
 
 	/**
@@ -206,16 +161,6 @@ class Plugin_Main implements With_Hooks {
 	private function add_service_hooks(): void {
 		// Register options.
 		$this->load_options();
-
-		// Load chatbot if needed.
-		add_action(
-			'init',
-			function () {
-				if ( $this->container['chatbot_loader']->can_load() ) {
-					$this->container['chatbot_loader']->load( $this->container['chatbot'] );
-				}
-			}
-		);
 	}
 
 	/**
@@ -287,25 +232,6 @@ class Plugin_Main implements With_Hooks {
 	 */
 	private function register_default_services(): void {
 		$this->services_api->register_service(
-			'anthropic',
-			static function ( Service_Registration_Context $context ) {
-				return new Anthropic_AI_Service(
-					$context->get_metadata(),
-					$context->get_authentication(),
-					$context->get_request_handler()
-				);
-			},
-			array(
-				'name'            => 'Anthropic (Claude)',
-				'credentials_url' => 'https://console.anthropic.com/settings/keys',
-				'type'            => Service_Type::CLOUD,
-				'capabilities'    => AI_Capabilities::get_model_classes_capabilities(
-					array( Anthropic_AI_Text_Generation_Model::class )
-				),
-				'allow_override'  => false,
-			)
-		);
-		$this->services_api->register_service(
 			'google',
 			static function ( Service_Registration_Context $context ) {
 				return new Google_AI_Service(
@@ -321,27 +247,7 @@ class Plugin_Main implements With_Hooks {
 				'capabilities'    => AI_Capabilities::get_model_classes_capabilities(
 					array(
 						Google_AI_Text_Generation_Model::class,
-						Google_AI_Image_Generation_Model::class,
 					)
-				),
-				'allow_override'  => false,
-			)
-		);
-		$this->services_api->register_service(
-			'mistral',
-			static function ( Service_Registration_Context $context ) {
-				return new Mistral_AI_Service(
-					$context->get_metadata(),
-					$context->get_authentication(),
-					$context->get_request_handler()
-				);
-			},
-			array(
-				'name'            => 'Mistral',
-				'credentials_url' => 'https://admin.mistral.ai/organization/api-keys',
-				'type'            => Service_Type::CLOUD,
-				'capabilities'    => AI_Capabilities::get_model_classes_capabilities(
-					array( Mistral_AI_Text_Generation_Model::class )
 				),
 				'allow_override'  => false,
 			)
@@ -361,105 +267,11 @@ class Plugin_Main implements With_Hooks {
 				'type'            => Service_Type::CLOUD,
 				'capabilities'    => AI_Capabilities::get_model_classes_capabilities(
 					array(
-						OpenAI_AI_Text_Generation_Model::class,
-						OpenAI_AI_Image_Generation_Model::class,
-						OpenAI_AI_Text_To_Speech_Model::class,
+						OpenAI_AI_Text_Generation_Model::class
 					)
 				),
 				'allow_override'  => false,
 			)
-		);
-		$this->services_api->register_service(
-			'perplexity',
-			static function ( Service_Registration_Context $context ) {
-				return new Perplexity_AI_Service(
-					$context->get_metadata(),
-					$context->get_authentication(),
-					$context->get_request_handler()
-				);
-			},
-			array(
-				'name'            => 'Perplexity (Sonar)',
-				'credentials_url' => 'https://www.perplexity.ai/account/api/keys',
-				'type'            => Service_Type::CLOUD,
-				'capabilities'    => AI_Capabilities::get_model_classes_capabilities(
-					array( Perplexity_AI_Text_Generation_Model::class )
-				),
-				'allow_override'  => false,
-			)
-		);
-		$this->services_api->register_service(
-			'xai',
-			static function ( Service_Registration_Context $context ) {
-				return new XAI_AI_Service(
-					$context->get_metadata(),
-					$context->get_authentication(),
-					$context->get_request_handler()
-				);
-			},
-			array(
-				'name'            => 'xAI (Grok)',
-				'credentials_url' => 'https://console.x.ai',
-				'type'            => Service_Type::CLOUD,
-				'capabilities'    => AI_Capabilities::get_model_classes_capabilities(
-					array(
-						XAI_AI_Text_Generation_Model::class,
-						XAI_AI_Image_Generation_Model::class,
-					)
-				),
-				'allow_override'  => false,
-			)
-		);
-	}
-
-	/**
-	 * Registers the mock AI service, if enabled.
-	 *
-	 * Since the mock AI service is purely for testing, it is opt-in. The registration happens on 'plugins_loaded', to
-	 * allow other plugins to decide whether to opt in via the {@see 'ai_services_register_mock_service'} filter.
-	 *
-	 * @since 0.7.0
-	 */
-	private function maybe_register_mock_service(): void {
-		add_action(
-			'plugins_loaded',
-			function () {
-				/**
-				 * Filters whether to register the built-in mock AI service for testing.
-				 *
-				 * The mock AI service can be used to simulate the presence of an AI service and different models,
-				 * and expected content for actual AI requests can be provided for more granular testing.
-				 *
-				 * This serves no real purpose on a production site and is purely intended for testing.
-				 *
-				 * @since 0.7.0
-				 *
-				 * @param bool $register_mock_service Whether to register the mock AI service.
-				 */
-				if ( ! apply_filters( 'ai_services_register_mock_service', false ) ) {
-					return;
-				}
-
-				$this->services_api->register_service(
-					'mock',
-					static function ( Service_Registration_Context $context ) {
-						return new Mock_AI_Service(
-							$context->get_metadata()
-						);
-					},
-					array(
-						'name'           => 'Mock (for testing)',
-						'type'           => Service_Type::SERVER,
-						'capabilities'   => AI_Capabilities::get_model_classes_capabilities(
-							array(
-								Mock_AI_Text_Generation_Model::class,
-								Mock_AI_Image_Generation_Model::class,
-							)
-						),
-						'allow_override' => false,
-					)
-				);
-			}
 		);
 	}
 }

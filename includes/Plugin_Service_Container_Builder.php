@@ -14,18 +14,18 @@ use Felix_Arntz\AI_Services\Installation\Plugin_Installer;
 use Felix_Arntz\AI_Services\Services\Services_API_Instance;
 use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Script_Registry;
 use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Style_Registry;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Current_User;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Input;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Network_Env;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Network_Runner;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Plugin_Env;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Service_Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Site_Env;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Registry;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Repository;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Validation\General_Validation_Rule_Builder;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Current_User;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Input;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Network_Env;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Network_Runner;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Plugin_Env;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Service_Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Site_Env;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Registry;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Repository;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Validation\General_Validation_Rule_Builder;
 
 /**
  * Plugin service container builder.
@@ -87,24 +87,7 @@ final class Plugin_Service_Container_Builder {
 	 */
 	public function build_services(): self {
 		$this->build_general_services();
-		$this->build_dependency_services();
 		$this->build_option_services();
-
-		$this->container['chatbot_loader'] = static function () {
-			return new Chatbot_Loader(
-				Services_API_Instance::get()
-			);
-		};
-		$this->container['chatbot']        = static function ( $cont ) {
-			return new Chatbot(
-				$cont['plugin_env'],
-				$cont['site_env'],
-				$cont['network_env'],
-				$cont['current_user'],
-				$cont['script_registry'],
-				$cont['style_registry']
-			);
-		};
 
 		return $this;
 	}
@@ -130,31 +113,7 @@ final class Plugin_Service_Container_Builder {
 		$this->container['network_runner']   = static function ( $cont ) {
 			return new Network_Runner( $cont['network_env'] );
 		};
-		$this->container['plugin_installer'] = static function ( $cont ) {
-			$installer = new Plugin_Installer(
-				$cont['plugin_env'],
-				$cont['option_container']['ais_version'],
-				$cont['option_container']['ais_delete_data']
-			);
-			$installer->set_network_runner( $cont['network_runner'] );
-			return $installer;
-		};
 	}
-
-	/**
-	 * Builds the dependency services for the service container.
-	 *
-	 * @since 0.1.0
-	 */
-	private function build_dependency_services(): void {
-		$this->container['script_registry'] = static function () {
-			return new Script_Registry();
-		};
-		$this->container['style_registry']  = static function () {
-			return new Style_Registry();
-		};
-	}
-
 	/**
 	 * Builds the option services for the service container.
 	 *
@@ -166,58 +125,10 @@ final class Plugin_Service_Container_Builder {
 		};
 		$this->container['option_container']  = function () {
 			$options = new Option_Container();
-			$this->add_options_to_container( $options );
 			return $options;
 		};
 		$this->container['option_registry']   = static function () {
 			return new Option_Registry( 'ai_services' );
-		};
-	}
-
-	/**
-	 * Adds the option definitions to the given option container.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param Option_Container $options Option container instance.
-	 */
-	private function add_options_to_container( Option_Container $options ): void {
-		// Option to control plugin version.
-		$options['ais_version'] = function () {
-			$sanitize_callback = ( new General_Validation_Rule_Builder() )
-				->require_string()
-				->format_version()
-				->get_option_sanitize_callback();
-
-			return new Option(
-				$this->container['option_repository'],
-				'ais_version',
-				array(
-					'type'              => 'string',
-					'sanitize_callback' => $sanitize_callback,
-					'default'           => '',
-					'autoload'          => true,
-				)
-			);
-		};
-
-		// Option for whether to delete data on uninstall.
-		$options['ais_delete_data'] = function () {
-			$sanitize_callback = ( new General_Validation_Rule_Builder() )
-				->require_boolean()
-				->get_option_sanitize_callback();
-
-			return new Option(
-				$this->container['option_repository'],
-				'ais_delete_data',
-				array(
-					'type'              => 'boolean',
-					'sanitize_callback' => $sanitize_callback,
-					'default'           => false,
-					'show_in_rest'      => true,
-					'autoload'          => false,
-				)
-			);
 		};
 	}
 }

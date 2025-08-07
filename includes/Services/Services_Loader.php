@@ -8,9 +8,9 @@
 
 namespace Felix_Arntz\AI_Services\Services;
 
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Capability_Controller;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\With_Hooks;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Service_Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Capability_Controller;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\With_Hooks;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Service_Container;
 
 /**
  * Loader class responsible for initializing the AI services functionality, including its public API.
@@ -47,10 +47,7 @@ final class Services_Loader implements With_Hooks {
 	public function add_hooks(): void {
 		$this->add_cleanup_hooks();
 		$this->load_capabilities();
-		$this->load_dependencies();
 		$this->load_options();
-		$this->load_rest_routes();
-		$this->load_admin_pages();
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'ai-services', $this->container['cli_command'] );
@@ -147,20 +144,6 @@ final class Services_Loader implements With_Hooks {
 	}
 
 	/**
-	 * Registers the JS & CSS dependencies for the AI services.
-	 *
-	 * @since 0.1.0
-	 */
-	private function load_dependencies(): void {
-		add_action(
-			'init',
-			function () {
-				$this->container['services_script_style_loader']->register_scripts_and_styles();
-			}
-		);
-	}
-
-	/**
 	 * Loads the services options.
 	 *
 	 * The option container is populated with options dynamically based on registered AI services. Each of the relevant
@@ -182,59 +165,6 @@ final class Services_Loader implements With_Hooks {
 				}
 			},
 			0
-		);
-	}
-
-	/**
-	 * Loads the plugin's REST API routes.
-	 *
-	 * @since 0.1.0
-	 */
-	private function load_rest_routes(): void {
-		add_action(
-			'rest_api_init',
-			function () {
-				foreach ( $this->container['rest_route_collection'] as $rest_route ) {
-					$this->container['rest_route_registry']->register(
-						$rest_route->get_base(),
-						$rest_route->get_registration_args()
-					);
-				}
-			}
-		);
-	}
-
-	/**
-	 * Loads the services admin pages.
-	 *
-	 * @since 0.1.0
-	 * @since 0.2.0 Include a link to the settings page in the plugin action links.
-	 * @since 0.5.0 Include admin pointers and rename method to clarify purpose.
-	 */
-	private function load_admin_pages(): void {
-		add_action(
-			'admin_menu',
-			function () {
-				$this->container['admin_settings_menu']->add_page( $this->container['admin_settings_page'] );
-				$this->container['admin_tools_menu']->add_page( $this->container['admin_playground_page'] );
-			}
-		);
-
-		add_action(
-			'admin_enqueue_scripts',
-			function ( $hook_suffix ) {
-				$this->container['admin_pointer_loader']->load_pointers( $hook_suffix );
-			}
-		);
-
-		add_filter(
-			"plugin_action_links_{$this->container['plugin_env']->basename()}",
-			function ( array $links ): array {
-				return array_merge(
-					$this->container['plugin_action_links']->get_tags(),
-					$links
-				);
-			}
 		);
 	}
 

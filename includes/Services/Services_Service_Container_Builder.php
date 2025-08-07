@@ -31,31 +31,31 @@ use Felix_Arntz\AI_Services\Services\REST_Routes\Service_REST_Resource_Schema;
 use Felix_Arntz\AI_Services\Services\REST_Routes\Service_Stream_Generate_Text_REST_Route;
 use Felix_Arntz\AI_Services\Services\REST_Routes\Service_Text_To_Speech_REST_Route;
 use Felix_Arntz\AI_Services\Services\Util\Data_Encryption;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Links\Admin_Link_Collection;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Links\Admin_Page_Link;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Links\Plugin_Action_Links;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Pages\Admin_Menu;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Pointers\Admin_Pointer_Collection;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Pointers\Admin_Pointer_Loader;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Base_Capability;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Capability_Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Capability_Controller;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Capability_Filters;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Meta_Capability;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Script_Registry;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Style_Registry;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Current_User;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Plugin_Env;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Service_Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Site_Env;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Meta\Meta_Repository;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Registry;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Repository;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\REST_Routes\Aggregate_REST_Route;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\REST_Routes\REST_Namespace;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\REST_Routes\REST_Route_Collection;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\REST_Routes\REST_Route_Registry;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Links\Admin_Link_Collection;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Links\Admin_Page_Link;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Links\Plugin_Action_Links;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Pages\Admin_Menu;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Pointers\Admin_Pointer_Collection;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Admin_Pointers\Admin_Pointer_Loader;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Base_Capability;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Capability_Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Capability_Controller;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Capability_Filters;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Capabilities\Meta_Capability;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Script_Registry;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Style_Registry;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Current_User;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Plugin_Env;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Service_Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Site_Env;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Meta\Meta_Repository;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Registry;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Repository;
+use Felix_Arntz\WP_OOP_Plugin_Lib\REST_Routes\Aggregate_REST_Route;
+use Felix_Arntz\WP_OOP_Plugin_Lib\REST_Routes\REST_Namespace;
+use Felix_Arntz\WP_OOP_Plugin_Lib\REST_Routes\REST_Route_Collection;
+use Felix_Arntz\WP_OOP_Plugin_Lib\REST_Routes\REST_Route_Registry;
 
 /**
  * Service container builder for the services loader.
@@ -118,11 +118,9 @@ final class Services_Service_Container_Builder {
 	public function build_services(): self {
 		$this->build_general_services();
 		$this->build_capability_services();
-		$this->build_dependency_services();
 		$this->build_http_services();
 		$this->build_option_services();
 		$this->build_entity_services();
-		$this->build_rest_services();
 		$this->build_admin_services();
 		$this->build_cli_services();
 
@@ -203,27 +201,6 @@ final class Services_Service_Container_Builder {
 	}
 
 	/**
-	 * Builds the dependency services for the service container.
-	 *
-	 * @since 0.1.0
-	 */
-	private function build_dependency_services(): void {
-		$this->container['script_registry']              = static function () {
-			return new Script_Registry();
-		};
-		$this->container['style_registry']               = static function () {
-			return new Style_Registry();
-		};
-		$this->container['services_script_style_loader'] = static function ( $cont ) {
-			return new Services_Script_Style_Loader(
-				$cont['plugin_env'],
-				$cont['script_registry'],
-				$cont['style_registry']
-			);
-		};
-	}
-
-	/**
 	 * Builds the HTTP services for the service container.
 	 *
 	 * @since 0.1.0
@@ -267,53 +244,6 @@ final class Services_Service_Container_Builder {
 	}
 
 	/**
-	 * Builds the REST services for the service container.
-	 *
-	 * @since 0.1.0
-	 */
-	private function build_rest_services(): void {
-		$this->container['rest_namespace']        = function () {
-			return new REST_Namespace( 'ai-services/v1' );
-		};
-		$this->container['rest_route_collection'] = function ( $cont ) {
-			$service_resource_schema = new Service_REST_Resource_Schema( $cont['rest_namespace'] );
-			$history_resource_schema = new History_REST_Resource_Schema( $cont['rest_namespace'] );
-
-			return new REST_Route_Collection(
-				array(
-					new Self_REST_Route(
-						$cont['plugin_env'],
-						$cont['site_env'],
-						$cont['api'],
-						$cont['current_user'],
-						$cont['admin_settings_menu'],
-						$cont['admin_tools_menu'],
-						$cont['admin_settings_page'],
-						$cont['admin_playground_page']
-					),
-					new Service_List_REST_Route( $cont['api'], $cont['current_user'], $service_resource_schema ),
-					new Service_Get_REST_Route( $cont['api'], $cont['current_user'], $service_resource_schema ),
-					new Service_Generate_Text_REST_Route( $cont['api'], $cont['current_user'] ),
-					new Service_Stream_Generate_Text_REST_Route( $cont['api'], $cont['current_user'] ),
-					new Service_Generate_Image_REST_Route( $cont['api'], $cont['current_user'] ),
-					new Service_Text_To_Speech_REST_Route( $cont['api'], $cont['current_user'] ),
-					new History_List_REST_Route( $cont['current_user'], $history_resource_schema ),
-					new Aggregate_REST_Route(
-						array(
-							new History_Get_REST_Route( $cont['current_user'], $history_resource_schema ),
-							new History_Update_REST_Route( $cont['current_user'], $history_resource_schema ),
-							new History_Delete_REST_Route( $cont['current_user'], $history_resource_schema ),
-						)
-					),
-				)
-			);
-		};
-		$this->container['rest_route_registry']   = function ( $cont ) {
-			return new REST_Route_Registry( $cont['rest_namespace'] );
-		};
-	}
-
-	/**
 	 * Builds the admin services for the service container.
 	 *
 	 * @since 0.1.0
@@ -324,75 +254,6 @@ final class Services_Service_Container_Builder {
 		};
 		$this->container['admin_tools_menu']              = static function () {
 			return new Admin_Menu( 'tools.php' );
-		};
-		$this->container['admin_settings_page']           = static function ( $cont ) {
-			return new Settings_Page(
-				$cont['script_registry'],
-				$cont['style_registry']
-			);
-		};
-		$this->container['admin_playground_page']         = static function ( $cont ) {
-			return new Playground_Page(
-				$cont['script_registry'],
-				$cont['style_registry']
-			);
-		};
-		$this->container['admin_settings_page_link']      = static function ( $cont ) {
-			return new Settings_Page_Link(
-				$cont['admin_settings_menu'],
-				$cont['admin_settings_page'],
-				$cont['site_env']
-			);
-		};
-		$this->container['admin_playground_page_link']    = static function ( $cont ) {
-			return new Admin_Page_Link(
-				$cont['admin_tools_menu'],
-				$cont['admin_playground_page'],
-				$cont['site_env']
-			);
-		};
-		$this->container['admin_link_collection']         = static function ( $cont ) {
-			return new Admin_Link_Collection(
-				array(
-					$cont['admin_settings_page_link'],
-					$cont['admin_playground_page_link'],
-				)
-			);
-		};
-		$this->container['plugin_action_links']           = static function ( $cont ) {
-			return new Plugin_Action_Links(
-				$cont['admin_link_collection'],
-				$cont['current_user']
-			);
-		};
-		$this->container['admin_settings_page_pointer']   = static function ( $cont ) {
-			return new Settings_Page_Pointer(
-				$cont['admin_settings_page_link'],
-				$cont['api']
-			);
-		};
-		$this->container['admin_playground_page_pointer'] = static function ( $cont ) {
-			return new Playground_Page_Pointer(
-				$cont['admin_playground_page_link'],
-				$cont['api']
-			);
-		};
-		$this->container['admin_pointer_collection']      = static function ( $cont ) {
-			return new Admin_Pointer_Collection(
-				array(
-					$cont['admin_settings_page_pointer'],
-					$cont['admin_playground_page_pointer'],
-				)
-			);
-		};
-		$this->container['admin_pointer_loader']          = static function ( $cont ) {
-			return new Admin_Pointer_Loader(
-				$cont['admin_pointer_collection'],
-				$cont['script_registry'],
-				$cont['style_registry'],
-				$cont['user_meta_repository'],
-				$cont['current_user']
-			);
 		};
 	}
 
