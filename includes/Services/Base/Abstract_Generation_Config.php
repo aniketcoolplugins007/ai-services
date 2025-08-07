@@ -10,7 +10,7 @@ namespace Felix_Arntz\AI_Services\Services\Base;
 
 use Felix_Arntz\AI_Services\Services\Contracts\Generation_Config;
 use Felix_Arntz\AI_Services\Services\Util\Strings;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Arrayable;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Arrayable;
 use InvalidArgumentException;
 
 /**

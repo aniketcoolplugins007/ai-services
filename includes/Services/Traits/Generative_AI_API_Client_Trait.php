@@ -11,10 +11,10 @@ namespace Felix_Arntz\AI_Services\Services\Traits;
 use Felix_Arntz\AI_Services\Services\Exception\Generative_AI_Exception;
 use Felix_Arntz\AI_Services\Services\HTTP\Contracts\Stream_Request_Handler;
 use Felix_Arntz\AI_Services\Services\HTTP\Contracts\With_Stream;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Response;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Exception\Request_Exception;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Response;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Exception\Request_Exception;
 use Generator;
 use InvalidArgumentException;
 

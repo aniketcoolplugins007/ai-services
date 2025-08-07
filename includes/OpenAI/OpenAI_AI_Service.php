@@ -20,7 +20,7 @@ use Felix_Arntz\AI_Services\Services\Exception\Generative_AI_Exception;
 use Felix_Arntz\AI_Services\Services\HTTP\HTTP_With_Streams;
 use Felix_Arntz\AI_Services\Services\Traits\With_API_Client_Trait;
 use Felix_Arntz\AI_Services\Services\Util\AI_Capabilities;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
 
 /**
  * Class for the OpenAI AI service.

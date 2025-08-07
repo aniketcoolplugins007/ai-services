@@ -13,8 +13,8 @@ use Felix_Arntz\AI_Services\Services\API\Types\Contracts\Tool;
 use Felix_Arntz\AI_Services\Services\API\Types\Tools\Function_Declarations_Tool;
 use Felix_Arntz\AI_Services\Services\API\Types\Tools\Web_Search_Tool;
 use Felix_Arntz\AI_Services\Services\Contracts\With_JSON_Schema;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Arrayable;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Collection;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Arrayable;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Collection;
 use InvalidArgumentException;
 use Traversable;
 

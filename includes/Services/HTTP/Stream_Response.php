@@ -9,7 +9,7 @@
 namespace Felix_Arntz\AI_Services\Services\HTTP;
 
 use Felix_Arntz\AI_Services\Services\HTTP\Contracts\With_Stream;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Generic_Response;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Generic_Response;
 use Felix_Arntz\AI_Services_Dependencies\Psr\Http\Message\StreamInterface;
 use Generator;
 use InvalidArgumentException;

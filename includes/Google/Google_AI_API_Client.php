@@ -10,7 +10,7 @@ namespace Felix_Arntz\AI_Services\Google;
 
 use Felix_Arntz\AI_Services\Services\Base\Generic_AI_API_Client;
 use Felix_Arntz\AI_Services\Services\Contracts\Authentication;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
 
 /**
  * Class to interact directly with the Google Generative Language API.

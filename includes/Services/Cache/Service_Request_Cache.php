@@ -11,7 +11,7 @@ namespace Felix_Arntz\AI_Services\Services\Cache;
 use Exception;
 use Felix_Arntz\AI_Services\Services\Contracts\Generative_AI_Model;
 use Felix_Arntz\AI_Services\Services\Contracts\Generative_AI_Service;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Arrayable;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Arrayable;
 use InvalidArgumentException;
 use RuntimeException;
 

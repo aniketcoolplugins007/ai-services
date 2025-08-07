@@ -10,7 +10,7 @@ namespace Felix_Arntz\AI_Services\Installation;
 
 use Exception;
 use Felix_Arntz\AI_Services\Services\Cache\Service_Request_Cache;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Installation\Abstract_Installer;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Installation\Abstract_Installer;
 
 /**
  * Plugin installer (and uninstaller).

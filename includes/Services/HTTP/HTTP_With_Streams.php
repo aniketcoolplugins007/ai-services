@@ -9,12 +9,12 @@
 namespace Felix_Arntz\AI_Services\Services\HTTP;
 
 use Felix_Arntz\AI_Services\Services\HTTP\Contracts\Stream_Request_Handler;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Response;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Exception\Request_Exception;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\HTTP;
-use Felix_Arntz\AI_Services_Dependencies\GuzzleHttp\Client;
-use Felix_Arntz\AI_Services_Dependencies\GuzzleHttp\Exception\ClientException;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Response;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Exception\Request_Exception;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\HTTP;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * Extended HTTP class with support for streaming responses.

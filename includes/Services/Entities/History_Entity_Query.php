@@ -10,7 +10,7 @@ namespace Felix_Arntz\AI_Services\Services\Entities;
 
 use Felix_Arntz\AI_Services\Services\API\History_Persistence;
 use Felix_Arntz\AI_Services\Services\API\Types\History;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Entities\Contracts\Entity_Query;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Entities\Contracts\Entity_Query;
 
 /**
  * Class representing a history entity query for the REST API.

@@ -9,7 +9,7 @@
 namespace Felix_Arntz\AI_Services\Services\Authentication;
 
 use Felix_Arntz\AI_Services\Services\Contracts\Authentication;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
 
 /**
  * Class that represents an API key.

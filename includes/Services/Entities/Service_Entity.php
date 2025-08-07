@@ -13,7 +13,7 @@ use Felix_Arntz\AI_Services\Services\API\Types\Service_Metadata;
 use Felix_Arntz\AI_Services\Services\Authentication\API_Key_Authentication;
 use Felix_Arntz\AI_Services\Services\Exception\Generative_AI_Exception;
 use Felix_Arntz\AI_Services\Services\Services_API;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Entities\Contracts\Entity;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Entities\Contracts\Entity;
 
 /**
  * Class representing a service entity for the REST API.

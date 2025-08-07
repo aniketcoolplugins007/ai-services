@@ -11,10 +11,10 @@ namespace Felix_Arntz\AI_Services\Services\Base;
 use Felix_Arntz\AI_Services\Services\Contracts\Authentication;
 use Felix_Arntz\AI_Services\Services\Contracts\Generative_AI_API_Client;
 use Felix_Arntz\AI_Services\Services\Traits\Generative_AI_API_Client_Trait;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Get_Request;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\JSON_Post_Request;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Get_Request;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\JSON_Post_Request;
 
 /**
  * Generic implementation of an AI API client, configured via constructor parameters.

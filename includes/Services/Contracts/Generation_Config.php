@@ -8,7 +8,7 @@
 
 namespace Felix_Arntz\AI_Services\Services\Contracts;
 
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Arrayable;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Arrayable;
 
 /**
  * Interface for a class representing configuration options for a generative AI model.

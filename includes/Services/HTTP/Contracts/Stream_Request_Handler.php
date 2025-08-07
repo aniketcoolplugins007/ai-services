@@ -9,8 +9,8 @@
 namespace Felix_Arntz\AI_Services\Services\HTTP\Contracts;
 
 use Felix_Arntz\AI_Services\Services\HTTP\Stream_Response;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Exception\Request_Exception;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Exception\Request_Exception;
 
 /**
  * Interface for a request handler that can stream responses.

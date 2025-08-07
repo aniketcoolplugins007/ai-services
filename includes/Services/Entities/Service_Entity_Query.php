@@ -9,7 +9,7 @@
 namespace Felix_Arntz\AI_Services\Services\Entities;
 
 use Felix_Arntz\AI_Services\Services\Services_API;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Entities\Contracts\Entity_Query;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Entities\Contracts\Entity_Query;
 
 /**
  * Class representing a service entity query for the REST API.

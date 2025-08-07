@@ -9,8 +9,8 @@
 namespace Felix_Arntz\AI_Services\Services\API;
 
 use Felix_Arntz\AI_Services\Services\API\Types\History;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Current_User;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Meta\Meta_Repository;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Current_User;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Meta\Meta_Repository;
 
 /**
  * Class for the history persistence layer.

@@ -8,7 +8,7 @@
 
 namespace Felix_Arntz\AI_Services\Services\Contracts;
 
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request;
 
 /**
  * Interface for a class representing authentication credentials of a certain kind for an API client.

@@ -12,11 +12,11 @@ use Felix_Arntz\AI_Services\Services\API\Types\Service_Metadata;
 use Felix_Arntz\AI_Services\Services\Cache\Service_Request_Cache;
 use Felix_Arntz\AI_Services\Services\Contracts\Generative_AI_Service;
 use Felix_Arntz\AI_Services\Services\Options\Option_Encrypter;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Key_Value_Repository;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Current_User;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Repository;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Key_Value_Repository;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Current_User;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Repository;
 use InvalidArgumentException;
 
 /**

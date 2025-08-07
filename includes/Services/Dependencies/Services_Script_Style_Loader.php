@@ -8,9 +8,9 @@
 
 namespace Felix_Arntz\AI_Services\Services\Dependencies;
 
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Script_Registry;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Style_Registry;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Plugin_Env;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Script_Registry;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Dependencies\Style_Registry;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Plugin_Env;
 
 /**
  * Class responsible for registering the available AI service related scripts and styles.

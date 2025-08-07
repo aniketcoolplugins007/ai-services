@@ -14,12 +14,12 @@ use Felix_Arntz\AI_Services\Services\Authentication\API_Key_Authentication;
 use Felix_Arntz\AI_Services\Services\Contracts\Generative_AI_Service;
 use Felix_Arntz\AI_Services\Services\Decorators\AI_Service_Decorator;
 use Felix_Arntz\AI_Services\Services\HTTP\HTTP_With_Streams;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Key_Value_Repository;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Container;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Repository;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\General\Contracts\Key_Value_Repository;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Container;
+use Felix_Arntz\WP_OOP_Plugin_Lib\Options\Option_Repository;
 use InvalidArgumentException;
 use RuntimeException;
 

@@ -10,7 +10,7 @@ namespace Felix_Arntz\AI_Services\Services;
 
 use Felix_Arntz\AI_Services\Services\API\Types\Service_Metadata;
 use Felix_Arntz\AI_Services\Services\Contracts\Authentication;
-use Felix_Arntz\AI_Services_Dependencies\Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
+use Felix_Arntz\WP_OOP_Plugin_Lib\HTTP\Contracts\Request_Handler;
 
 /**
  * Value class with service context dependencies and data that can be used to create a service instance.
