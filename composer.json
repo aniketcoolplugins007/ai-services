@@ -26,68 +26,29 @@
 		},
 		"allow-plugins": {
 			"composer/installers": true
-		}
+		},
+    "optimize-autoloader": true,
+    "classmap-authoritative": true
 	},
 	"autoload": {
-		"psr-4": {
-			"Felix_Arntz\\AI_Services\\": "includes/"
-		}
-	},
+  "psr-4": {
+    "Felix_Arntz\\AI_Services\\": "includes/"
+  },
+  "classmap": [
+    "includes/"
+  ]
+},
 	"autoload-dev": {
 		"psr-4": {
 			"Felix_Arntz\\AI_Services\\PHPUnit\\Includes\\": "tests/phpunit/includes"
 		}
 	},
 	"scripts": {
-		"post-install-cmd": [
-			"@prefix-dependencies"
-		],
-		"post-update-cmd": [
-			"@prefix-dependencies"
-		],
-		"autoload-includes": [
-			"echo '{ \"autoload\": { \"classmap\": [\"\"] } }' > includes/composer.json",
-			"@composer --working-dir=includes dump-autoload --classmap-authoritative --no-interaction",
-			"cp includes/vendor/composer/autoload_classmap.php includes/",
-			"rm -rf includes/vendor && rm includes/composer.json",
-			"mkdir -p includes/vendor/composer && mv includes/autoload_classmap.php includes/vendor/composer/"
-		],
-		"autoload-third-party": [
-			"echo '{ \"autoload\": { \"classmap\": [\"\"] } }' > third-party/composer.json",
-			"@composer --working-dir=third-party dump-autoload --classmap-authoritative --no-interaction",
-			"cp third-party/vendor/composer/autoload_classmap.php third-party/",
-			"rm -rf third-party/vendor && rm third-party/composer.json",
-			"mkdir -p third-party/vendor/composer && mv third-party/autoload_classmap.php third-party/vendor/composer/"
-		],
-		"format": [
-			"composer --working-dir=tools/php/lint update",
-			"tools/php/lint/vendor/bin/phpcbf --standard=phpcs.xml.dist"
-		],
-		"lint": [
-			"composer --working-dir=tools/php/lint update",
-			"tools/php/lint/vendor/bin/phpcs --standard=phpcs.xml.dist"
-		],
-		"phpmd": [
-			"composer --working-dir=tools/php/lint update",
-			"tools/php/lint/vendor/bin/phpmd . text phpmd.xml"
-		],
-		"phpstan": [
-			"composer --working-dir=tools/php/lint update",
-			"tools/php/lint/vendor/bin/phpstan analyse --memory-limit=2048M"
-		],
-		"prefix-dependencies": [
-			"composer --working-dir=tools/php/prefix update",
-			"tools/php/prefix/vendor/bin/php-scoper add --output-dir=./third-party --force --quiet",
-			"@autoload-includes",
-			"@autoload-third-party"
-		],
-		"test": [
-			"composer --working-dir=tools/php/test update",
-			"tools/php/test/vendor/bin/phpunit -c phpunit.xml.dist --verbose"
-		],
-		"test-multisite": [
-			"composer --working-dir=tools/php/test update",
-			"WP_MULTISITE=1 tools/php/test/vendor/bin/phpunit -c phpunit.xml.dist --exclude-group=ms-excluded --verbose"
-		]
-	}
+    "post-install-cmd": [
+      "@prefix-dependencies"
+    ],
+    "post-update-cmd": [
+      "@prefix-dependencies"
+    ]
+  }
 }
