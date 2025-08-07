@@ -1,5 +1,6 @@
-.wordpress.org/
+uninstall.php
 .clineignore
+.wordpress.org/
 .clinerules/
 .github/
 docs/
@@ -7,6 +8,7 @@ examples/
 tools/
 tests/
 src/
+includes/Installation/
 includes/Chatbot/
 includes/Services/Admin/
 includes/Services/REST_Routes/
