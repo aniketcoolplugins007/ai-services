@@ -73,6 +73,7 @@ tests/
 src/
 includes/Chatbot/
 includes/Services/Admin/
+includes/Services/REST_Routes/
 includes/Anthropic/
 includes/Mistral/
 includes/Mock/
