@@ -73,3 +73,4 @@ tests/
 src/
 includes/Chatbot/
 includes/Services/Admin/
+includes/Anthropic/
