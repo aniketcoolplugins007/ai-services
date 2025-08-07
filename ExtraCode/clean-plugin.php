@@ -12,31 +12,44 @@ function delete_items_from_list($file_path, $base_path) {
         $line = trim($line);
         if ($line === '' || str_starts_with($line, '#')) continue;
 
-        $target_path = rtrim($base_path, '/') . '/' . ltrim($line, '/');
+        // Convert path to glob pattern
+        $pattern = rtrim($base_path, '/') . '/' . ltrim($line, '/');
 
-        if (str_ends_with($line, '/')) {
+        // Handle ** by converting to GLOB_BRACE syntax
+        if (str_contains($line, '**')) {
+            $pattern = str_replace('**', '{,*/**}', $pattern);
+            $matches = glob($pattern, GLOB_BRACE);
+        } else {
+            $matches = glob($pattern, GLOB_BRACE);
+        }
+
+        if (!$matches) {
+            echo "⚠️  No matches for: $line\n";
+            continue;
+        }
+
+        foreach ($matches as $target_path) {
             if (is_dir($target_path)) {
                 rrmdir($target_path);
-                echo "🗑️  Deleted folder: $line\n";
-            } else {
-                echo "⚠️  Folder not found: $line\n";
-            }
-        } else {
-            if (file_exists($target_path)) {
+                echo "🗑️  Deleted folder: $target_path\n";
+            } elseif (is_file($target_path)) {
                 unlink($target_path);
-                echo "🗑️  Deleted file: $line\n";
+                echo "🗑️  Deleted file: $target_path\n";
             } else {
-                echo "⚠️  File not found: $line\n";
+                echo "⚠️  Not found or unsupported: $target_path\n";
             }
         }
     }
 }
 
 function rrmdir($dir) {
+    if (!is_dir($dir)) return;
+
     $items = scandir($dir);
     foreach ($items as $item) {
         if ($item === '.' || $item === '..') continue;
-        $path = "$dir/$item";
+        $path = $dir . DIRECTORY_SEPARATOR . $item;
+
         is_dir($path) ? rrmdir($path) : unlink($path);
     }
     rmdir($dir);

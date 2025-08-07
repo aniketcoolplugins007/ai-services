@@ -29,3 +29,7 @@ vendor/felixarntz/wp-oop-plugin-lib/src/Installation/
 vendor/felixarntz/wp-oop-plugin-lib/src/Privacy/
 vendor/felixarntz/wp-oop-plugin-lib/src/REST_Routes/
 vendor/felixarntz/wp-oop-plugin-lib/src/Validation/
+vendor/*/.gitignore
+vendor/**/composer.json
+vendor/**/README.md
+vendor/**/CHANGELOG.md

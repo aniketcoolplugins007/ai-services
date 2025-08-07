@@ -31,7 +31,6 @@ build-types
 
 node_modules/
 third-party/
-vendor/
 
 ############
 ## OSes
