@@ -34,6 +34,14 @@ final class API_Key_Authentication implements Authentication {
 	 */
 	private $header_name = 'Authorization';
 
+		/**
+	 * The authentication scheme to use for the API key.
+	 *
+	 * @since 0.1.0
+	 * @var string
+	 */
+	private $authencation_scheme = 'Bearer';
+
 	/**
 	 * Constructor.
 	 *
@@ -54,7 +62,7 @@ final class API_Key_Authentication implements Authentication {
 	 */
 	public function authenticate( Request $request ): void {
 		if ( 'authorization' === strtolower( $this->header_name ) ) {
-			$request->add_header( $this->header_name, 'Bearer ' . $this->api_key );
+			$request->add_header( $this->header_name, $this->authencation_scheme . ' ' . $this->api_key );
 		} else {
 			$request->add_header( $this->header_name, $this->api_key );
 		}
@@ -69,6 +77,10 @@ final class API_Key_Authentication implements Authentication {
 	 */
 	public function set_header_name( string $header_name ): void {
 		$this->header_name = $header_name;
+	}
+
+	public function set_authencation_scheme( string $authencation_scheme ): void {
+		$this->authencation_scheme = $authencation_scheme;
 	}
 
 	/**
