@@ -8,50 +8,31 @@
 
 namespace Felix_Arntz\AI_Services\Deepl;
 
-use Felix_Arntz\AI_Services\Google\Types\Safety_Setting;
 use Felix_Arntz\AI_Services\Services\API\Enums\Content_Role;
-use Felix_Arntz\AI_Services\Services\API\Helpers;
 use Felix_Arntz\AI_Services\Services\API\Types\Candidate;
 use Felix_Arntz\AI_Services\Services\API\Types\Candidates;
 use Felix_Arntz\AI_Services\Services\API\Types\Content;
 use Felix_Arntz\AI_Services\Services\API\Types\Model_Metadata;
 use Felix_Arntz\AI_Services\Services\API\Types\Parts;
-use Felix_Arntz\AI_Services\Services\API\Types\Parts\File_Data_Part;
-use Felix_Arntz\AI_Services\Services\API\Types\Parts\Function_Call_Part;
-use Felix_Arntz\AI_Services\Services\API\Types\Parts\Function_Response_Part;
-use Felix_Arntz\AI_Services\Services\API\Types\Parts\Inline_Data_Part;
 use Felix_Arntz\AI_Services\Services\API\Types\Parts\Text_Part;
-use Felix_Arntz\AI_Services\Services\API\Types\Text_Generation_Config;
-use Felix_Arntz\AI_Services\Services\API\Types\Tool_Config;
-use Felix_Arntz\AI_Services\Services\API\Types\Tools;
-use Felix_Arntz\AI_Services\Services\API\Types\Tools\Function_Declarations_Tool;
-use Felix_Arntz\AI_Services\Services\API\Types\Tools\Web_Search_Tool;
 use Felix_Arntz\AI_Services\Services\Base\Abstract_AI_Model;
 use Felix_Arntz\AI_Services\Services\Contracts\Generative_AI_API_Client;
 use Felix_Arntz\AI_Services\Services\Contracts\With_API_Client;
-use Felix_Arntz\AI_Services\Services\Contracts\With_Chat_History;
 use Felix_Arntz\AI_Services\Services\Contracts\With_Function_Calling;
-use Felix_Arntz\AI_Services\Services\Contracts\With_Multimodal_Input;
-use Felix_Arntz\AI_Services\Services\Contracts\With_Multimodal_Output;
 use Felix_Arntz\AI_Services\Services\Contracts\With_Text_Generation;
-use Felix_Arntz\AI_Services\Services\Contracts\With_Web_Search;
 use Felix_Arntz\AI_Services\Services\Exception\Generative_AI_Exception;
-use Felix_Arntz\AI_Services\Services\Traits\Model_Param_System_Instruction_Trait;
 use Felix_Arntz\AI_Services\Services\Traits\Model_Param_Text_Generation_Config_Trait;
-use Felix_Arntz\AI_Services\Services\Traits\Model_Param_Tool_Config_Trait;
-use Felix_Arntz\AI_Services\Services\Traits\Model_Param_Tools_Trait;
 use Felix_Arntz\AI_Services\Services\Traits\With_API_Client_Trait;
-use Felix_Arntz\AI_Services\Services\Traits\With_Chat_History_Trait;
 use Felix_Arntz\AI_Services\Services\Traits\With_Text_Generation_Trait;
 use Felix_Arntz\AI_Services\Services\Util\Transformer;
 use Generator;
 use InvalidArgumentException;
 
 /**
- * Class representing a Google text generation AI model.
+ * Class representing a Deepl text generation AI model.
  *
  * @since 0.1.0
- * @since 0.5.0 Renamed from `Google_AI_Model`.
+ * @since 0.5.0 Renamed from `Deepl_AI_Model`.
  */
 	class Deepl_AI_Text_Generation_Model extends Abstract_AI_Model implements With_API_Client, With_Text_Generation, With_Function_Calling {
 		use With_API_Client_Trait;
@@ -66,7 +47,7 @@ use InvalidArgumentException;
 	 * @param Generative_AI_API_Client $api_client      The AI API client instance.
 	 * @param Model_Metadata           $metadata        The model metadata.
 	 * @param array<string, mixed>     $model_params    Optional. Additional model parameters. See
-	 *                                                  {@see Google_AI_Service::get_model()} for the list of available
+	 *                                                  {@see Deepl_AI_Service::get_model()} for the list of available
 	 *                                                  parameters. Default empty array.
 	 * @param array<string, mixed>     $request_options Optional. The request options. Default empty array.
 	 *
@@ -190,34 +171,45 @@ use InvalidArgumentException;
 	 * @throws Generative_AI_Exception Thrown if the response does not have any candidates with content.
 	 */
 	private function get_response_candidates( array $response_data, ?Candidates $prev_chunk_candidates = null ): Candidates {
-		if ( ! isset( $response_data['candidates'] ) ) {
-			throw $this->get_api_client()->create_missing_response_key_exception( 'candidates' );
+		if ( ! isset( $response_data['translations'] ) ) {
+			throw $this->get_api_client()->create_missing_response_key_exception( 'translations' );
 		}
-
-		$this->check_non_empty_candidates( $response_data['candidates'] );
 
 		if ( null === $prev_chunk_candidates ) {
 			$other_data = $response_data;
-			unset( $other_data['candidates'] );
+			unset( $other_data['translations'] );
 
 			$candidates = new Candidates();
-			foreach ( $response_data['candidates'] as $index => $candidate_data ) {
-				$other_candidate_data = $candidate_data;
-				unset( $other_candidate_data['content'] );
 
-				$candidates->add_candidate(
-					new Candidate(
-						$this->prepare_candidate_content( $candidate_data, $index ),
-						array_merge( $other_candidate_data, $other_data )
-					)
-				);
+			$translate_strings=array();
+			$translation_data=array();
+
+			foreach ( $response_data['translations'] as $index => $translation_data ) {
+				$translate_strings[$index]=$translation_data['text'];
+
+				if(!isset($translation_data['confidence'])){
+					$translation_data['confidence']=0;
+				}
+
+				if(!isset($translation_data['detected_source_language'])){
+					$translation_data['detected_source_language']='';
+				}
 			}
+
+			$translation_data['text']=json_encode($translate_strings, JSON_FORCE_OBJECT);
+
+			$candidates->add_candidate(
+				new Candidate(
+					$this->prepare_translation_content( $translation_data ),
+					$other_data
+				)
+			);
 
 			return $candidates;
 		}
 
 		// Subsequent chunk of a streaming response.
-		$candidates_data = $this->merge_candidates_chunk(
+		$candidates_data = $this->merge_translation_chunk(
 			$prev_chunk_candidates->to_array(),
 			$response_data
 		);
@@ -236,15 +228,15 @@ use InvalidArgumentException;
 	 *
 	 * @throws Generative_AI_Exception Thrown if the response is invalid.
 	 */
-	private function merge_candidates_chunk( array $candidates_data, array $chunk_data ): array {
-		if ( ! isset( $chunk_data['candidates'] ) ) {
-			throw $this->get_api_client()->create_missing_response_key_exception( 'candidates' );
+	private function merge_translation_chunk( array $candidates_data, array $chunk_data ): array {
+		if ( ! isset( $chunk_data['translations'] ) ) {
+			throw $this->get_api_client()->create_missing_response_key_exception( 'translations' );
 		}
 
 		$other_data = $chunk_data;
-		unset( $other_data['candidates'] );
+		unset( $other_data['translations'] );
 
-		foreach ( $chunk_data['candidates'] as $index => $candidate_data ) {
+		foreach ( $chunk_data['translations'] as $index => $candidate_data ) {
 			$candidates_data[ $index ] = array_merge( $candidates_data[ $index ], $candidate_data, $other_data );
 		}
 
@@ -252,88 +244,31 @@ use InvalidArgumentException;
 	}
 
 	/**
-	 * Transforms a given candidate from the API response into a Content instance.
+	 * Transforms a given choice from the API response into a Content instance.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param array<string, mixed> $candidate_data The API response candidate data.
-	 * @param int                  $index          The index of the candidate in the response.
+	 * @param array<string, mixed> $choice_data The API response candidate data.
+	 * @param int                  $index       The index of the choice in the response.
 	 * @return Content The Content instance.
 	 *
 	 * @throws Generative_AI_Exception Thrown if the response is invalid.
 	 */
-	private function prepare_candidate_content( array $candidate_data, int $index ): Content {
-		if ( ! isset( $candidate_data['content']['parts'] ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
-			throw $this->get_api_client()->create_missing_response_key_exception( "candidates.{$index}.content.parts" );
-		}
-
-		// TODO: How to handle the 'audio/L16' MIME type output? Can it be converted to WAV in PHP?
-		foreach ( $candidate_data['content']['parts'] as $index => $part ) {
-			if ( isset( $part['inlineData']['mimeType'] ) && isset( $part['inlineData']['data'] ) ) {
-				$candidate_data['content']['parts'][ $index ]['inlineData']['data'] = Helpers::base64_data_to_base64_data_url(
-					$part['inlineData']['data'],
-					$part['inlineData']['mimeType']
-				);
-			}
-		}
-
-		$role = isset( $candidate_data['content']['role'] ) && 'user' === $candidate_data['content']['role']
-			? Content_Role::USER
-			: Content_Role::MODEL;
-
+	private function prepare_translation_content( array $translation_data ): Content {
 		return new Content(
-			$role,
-			Parts::from_array( $candidate_data['content']['parts'] )
+			Content_Role::MODEL,
+			$this->prepare_translation_content_parts( $translation_data )
 		);
 	}
 
-	/**
-	 * Checks that the response includes candidates with content.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param array<string, mixed>[] $candidates_data The candidates data from the response.
-	 *
-	 * @throws Generative_AI_Exception Thrown if the response does not include any candidates with content.
-	 */
-	private function check_non_empty_candidates( array $candidates_data ): void {
-		$errors = array();
-		foreach ( $candidates_data as $candidate_data ) {
-			if ( ! isset( $candidate_data['content'] ) ) {
-				if ( isset( $candidate_data['finishReason'] ) ) {
-					$errors[] = $candidate_data['finishReason'];
-				} else {
-					$errors[] = 'unknown';
-				}
-			}
-		}
+	private function prepare_translation_content_parts( array $translation_data ): Parts {
+		$parts[] = array(
+			'text' => $translation_data['text'],
+			'detected_source_language' => $translation_data['detected_source_language'] ?? '',
+			'confidence' => $translation_data['confidence'] ?? 0,
+		);
 
-		if ( count( $errors ) === count( $candidates_data ) ) {
-			$message = 'The response does not include any candidates with content.';
-
-			$errors = array_unique(
-				array_filter(
-					$errors,
-					static function ( $error ) {
-						return 'unknown' !== $error;
-					}
-				)
-			);
-			if ( count( $errors ) > 0 ) {
-				$message .= ' ' . sprintf(
-					/* translators: %s: finish reason code */
-					'Finish reason: %s',
-					implode(
-						', ',
-						$errors
-					)
-				);
-			}
-
-			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
-			throw $this->get_api_client()->create_response_exception( $message );
-		}
+		return Parts::from_array($parts);
 	}
 
 	/**
@@ -363,161 +298,5 @@ use InvalidArgumentException;
 				return $parts;
 			},
 		);
-	}
-
-	/**
-	 * Gets the generation configuration transformers.
-	 *
-	 * @since 0.2.0
-	 * @since 0.7.0 Changed to non-static.
-	 *
-	 * @return array<string, callable> The generation configuration transformers.
-	 */
-	private function get_generation_config_transformers(): array {
-		return array(
-			'stopSequences'      => static function ( Text_Generation_Config $config ) {
-				return $config->get_stop_sequences();
-			},
-			'responseMimeType'   => static function ( Text_Generation_Config $config ) {
-				return $config->get_response_mime_type();
-			},
-			'responseSchema'     => static function ( Text_Generation_Config $config ) {
-				if ( $config->get_response_mime_type() === 'application/json' ) {
-					return $config->get_response_schema();
-				}
-				return array();
-			},
-			'candidateCount'     => static function ( Text_Generation_Config $config ) {
-				return $config->get_candidate_count();
-			},
-			'maxOutputTokens'    => static function ( Text_Generation_Config $config ) {
-				return $config->get_max_output_tokens();
-			},
-			'temperature'        => static function ( Text_Generation_Config $config ) {
-				// In the Google AI API temperature ranges from 0.0 to 2.0.
-				return $config->get_temperature() * 2.0;
-			},
-			'topP'               => static function ( Text_Generation_Config $config ) {
-				return $config->get_top_p();
-			},
-			'topK'               => static function ( Text_Generation_Config $config ) {
-				return $config->get_top_k();
-			},
-			'presencePenalty'    => static function ( Text_Generation_Config $config ) {
-				return $config->get_presence_penalty();
-			},
-			'frequencyPenalty'   => static function ( Text_Generation_Config $config ) {
-				return $config->get_frequency_penalty();
-			},
-			'responseLogprobs'   => static function ( Text_Generation_Config $config ) {
-				return $config->get_response_logprobs();
-			},
-			'logprobs'           => static function ( Text_Generation_Config $config ) {
-				return $config->get_logprobs();
-			},
-			'responseModalities' => static function ( Text_Generation_Config $config ) {
-				$modalities = $config->get_output_modalities();
-				if ( count( $modalities ) > 0 ) {
-					return array_map(
-						static function ( $modality ) {
-							// Change "text" to "Text", "image" to "Image", etc.
-							return ucfirst( $modality );
-						},
-						$modalities
-					);
-				}
-				return $modalities;
-			},
-		);
-	}
-
-	/**
-	 * Prepares the API request tools parameter for the model.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @param Tools $tools The tools to prepare the parameter with.
-	 * @return array<string, mixed>[] The tools parameter value.
-	 *
-	 * @throws InvalidArgumentException Thrown if an invalid tool is provided.
-	 */
-	private function prepare_tools_param( Tools $tools ): array {
-		$tools_param = array();
-
-		foreach ( $tools as $tool ) {
-			if ( $tool instanceof Function_Declarations_Tool ) {
-				$function_declarations = $tool->get_function_declarations();
-				$declarations_data     = array();
-				foreach ( $function_declarations as $declaration ) {
-					$declarations_data[] = array_filter(
-						array(
-							'name'        => $declaration['name'],
-							'description' => $declaration['description'] ?? null,
-							'parameters'  => isset( $declaration['parameters'] ) ? $this->remove_additional_properties_key( $declaration['parameters'] ) : null,
-						)
-					);
-				}
-				$tools_param[] = array(
-					'functionDeclarations' => $declarations_data,
-				);
-			} elseif ( $tool instanceof Web_Search_Tool ) {
-				// Filtering by allowed or disallowed domains is not supported by the Google AI API.
-				$tools_param[] = array( 'googleSearch' => new \stdClass() );
-			} else {
-				throw $this->get_api_client()->create_bad_request_exception(
-					'Only function declarations and web search tools are supported.'
-				);
-			}
-		}
-
-		return $tools_param;
-	}
-
-	/**
-	 * Removes the `additionalProperties` key from the schema, including child schemas.
-	 *
-	 * This is necessary because the Google AI API will reject the schema if it contains this key.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @param array<string, mixed> $schema The schema to remove the `additionalProperties` key from.
-	 * @return array<string, mixed> The schema without the `additionalProperties` key.
-	 */
-	private function remove_additional_properties_key( array $schema ): array {
-		if ( isset( $schema['additionalProperties'] ) ) {
-			unset( $schema['additionalProperties'] );
-		}
-		if ( isset( $schema['properties'] ) ) {
-			foreach ( $schema['properties'] as $key => $child_schema ) {
-				$schema['properties'][ $key ] = $this->remove_additional_properties_key( $child_schema );
-			}
-		}
-		return $schema;
-	}
-
-	/**
-	 * Prepares the API request tool config parameter for the model.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @param Tool_Config $tool_config The tool config to prepare the parameter with.
-	 * @return array<string, mixed> The tool config parameter value.
-	 */
-	private function prepare_tool_config_param( Tool_Config $tool_config ): array {
-		$tool_config_param = array(
-			'functionCallingConfig' => array(
-				// Either 'auto' or 'any'.
-				'mode' => strtoupper( $tool_config->get_function_call_mode() ),
-			),
-		);
-
-		if ( 'ANY' === $tool_config_param['functionCallingConfig']['mode'] ) {
-			$allowed_function_names = $tool_config->get_allowed_function_names();
-			if ( count( $allowed_function_names ) > 0 ) {
-				$tool_config_param['functionCallingConfig']['allowedFunctionNames'] = $allowed_function_names;
-			}
-		}
-
-		return $tool_config_param;
 	}
 }
