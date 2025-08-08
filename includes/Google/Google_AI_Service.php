@@ -175,7 +175,6 @@ class Google_AI_Service extends Abstract_AI_Service implements With_API_Client {
 		$model_class = AI_Capabilities::get_model_class_for_capabilities(
 			array(
 				Google_AI_Text_Generation_Model::class,
-				Google_AI_Image_Generation_Model::class,
 			),
 			$model_metadata->get_capabilities()
 		);

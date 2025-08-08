@@ -160,9 +160,7 @@ class OpenAI_AI_Service extends Abstract_AI_Service implements With_API_Client {
 	protected function create_model_instance( Model_Metadata $model_metadata, array $model_params, array $request_options ): Generative_AI_Model {
 		$model_class = AI_Capabilities::get_model_class_for_capabilities(
 			array(
-				OpenAI_AI_Text_Generation_Model::class,
-				OpenAI_AI_Image_Generation_Model::class,
-				OpenAI_AI_Text_To_Speech_Model::class,
+				OpenAI_AI_Text_Generation_Model::class
 			),
 			$model_metadata->get_capabilities()
 		);
