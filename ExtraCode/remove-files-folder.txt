@@ -8,6 +8,7 @@ examples/
 tools/
 tests/
 src/
+includes/**/README.md
 includes/Installation/
 includes/Chatbot/
 includes/Services/Admin/
