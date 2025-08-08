@@ -33,6 +33,8 @@ if(!class_exists('AI_Tab_Shortcode_Ajax')){
                         $strings = html_entity_decode($strings);
                     }
 
+                    $strings = json_decode(stripcslashes($strings), true);
+
                     // Get the target language
                     $target_language = $target_language;
 
@@ -63,7 +65,7 @@ if(!class_exists('AI_Tab_Shortcode_Ajax')){
                     if($slug === 'deepl'){
                         $data=array();
 
-                        $data['text'] = json_decode($strings, true);
+                        $data['text'] = $strings;
                         $data['target_lang'] = $target_language;
                         $data['tag_handling'] = 'html';
 

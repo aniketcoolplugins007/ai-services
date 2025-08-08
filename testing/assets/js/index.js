@@ -17,7 +17,7 @@ class AIContentGenerator {
     }
   
     async sendRequest() {
-      const prompt = this.promptInput.value.trim();
+      const prompt = [this.promptInput.value.trim()];
       const slug = this.serviceSelect.value;
   
       if (!prompt) {
@@ -32,12 +32,13 @@ class AIContentGenerator {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Accept': 'application/json',
           },
           body: new URLSearchParams({
             action: AI_Tab_Shortcode.action,
             slug: slug,
-            strings: prompt,
-            target_language: 'hi',
+            strings: JSON.stringify(prompt),
+            target_language: 'fr',
           })
         });
   
