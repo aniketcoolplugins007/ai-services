@@ -16,6 +16,7 @@ includes/Anthropic/
 includes/Mistral/
 includes/Mock/
 includes/Perplexity/
+includes/Services/CLI/AI_Services_Command.php
 includes/Google/Google_AI_Image_Generation_Model.php
 includes/OpenAI/OpenAI_AI_Image_Generation_Model.php
 includes/OpenAI/OpenAI_AI_Text_To_Speech_Model.php
