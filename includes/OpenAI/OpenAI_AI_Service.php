@@ -81,12 +81,10 @@ class OpenAI_AI_Service extends Abstract_AI_Service implements With_API_Client {
 
 		// Unfortunately, the OpenAI API does not return model capabilities, so we have to hardcode them here.
 		$gpt_capabilities            = array(
-			AI_Capability::CHAT_HISTORY,
 			AI_Capability::FUNCTION_CALLING,
 			AI_Capability::TEXT_GENERATION,
 		);
 		$gpt_multimodal_capabilities = array(
-			AI_Capability::CHAT_HISTORY,
 			AI_Capability::FUNCTION_CALLING,
 			AI_Capability::MULTIMODAL_INPUT,
 			AI_Capability::TEXT_GENERATION,

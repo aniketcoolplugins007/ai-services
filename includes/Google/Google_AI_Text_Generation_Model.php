@@ -53,10 +53,9 @@ use InvalidArgumentException;
  * @since 0.1.0
  * @since 0.5.0 Renamed from `Google_AI_Model`.
  */
-class Google_AI_Text_Generation_Model extends Abstract_AI_Model implements With_API_Client, With_Text_Generation, With_Chat_History, With_Function_Calling, With_Web_Search, With_Multimodal_Input, With_Multimodal_Output {
+class Google_AI_Text_Generation_Model extends Abstract_AI_Model implements With_API_Client, With_Text_Generation, With_Function_Calling, With_Web_Search, With_Multimodal_Input, With_Multimodal_Output {
 	use With_API_Client_Trait;
 	use With_Text_Generation_Trait;
-	use With_Chat_History_Trait;
 	use Model_Param_Text_Generation_Config_Trait;
 	use Model_Param_Tool_Config_Trait;
 	use Model_Param_Tools_Trait;

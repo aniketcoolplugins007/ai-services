@@ -61,14 +61,8 @@ final class AI_Capabilities {
 		$interfaces = class_implements( $model_class );
 
 		$capabilities = array();
-		if ( isset( $interfaces[ With_Chat_History::class ] ) ) {
-			$capabilities[] = AI_Capability::CHAT_HISTORY;
-		}
 		if ( isset( $interfaces[ With_Function_Calling::class ] ) ) {
 			$capabilities[] = AI_Capability::FUNCTION_CALLING;
-		}
-		if ( isset( $interfaces[ With_Image_Generation::class ] ) ) {
-			$capabilities[] = AI_Capability::IMAGE_GENERATION;
 		}
 		if ( isset( $interfaces[ With_Multimodal_Input::class ] ) ) {
 			$capabilities[] = AI_Capability::MULTIMODAL_INPUT;
@@ -78,9 +72,6 @@ final class AI_Capabilities {
 		}
 		if ( isset( $interfaces[ With_Text_Generation::class ] ) ) {
 			$capabilities[] = AI_Capability::TEXT_GENERATION;
-		}
-		if ( isset( $interfaces[ With_Text_To_Speech::class ] ) ) {
-			$capabilities[] = AI_Capability::TEXT_TO_SPEECH;
 		}
 		if ( isset( $interfaces[ With_Web_Search::class ] ) ) {
 			$capabilities[] = AI_Capability::WEB_SEARCH;
@@ -100,14 +91,8 @@ final class AI_Capabilities {
 	 */
 	public static function get_model_instance_capabilities( Generative_AI_Model $model ): array {
 		$capabilities = array();
-		if ( $model instanceof With_Chat_History ) {
-			$capabilities[] = AI_Capability::CHAT_HISTORY;
-		}
 		if ( $model instanceof With_Function_Calling ) {
 			$capabilities[] = AI_Capability::FUNCTION_CALLING;
-		}
-		if ( $model instanceof With_Image_Generation ) {
-			$capabilities[] = AI_Capability::IMAGE_GENERATION;
 		}
 		if ( $model instanceof With_Multimodal_Input ) {
 			$capabilities[] = AI_Capability::MULTIMODAL_INPUT;
@@ -117,9 +102,6 @@ final class AI_Capabilities {
 		}
 		if ( $model instanceof With_Text_Generation ) {
 			$capabilities[] = AI_Capability::TEXT_GENERATION;
-		}
-		if ( $model instanceof With_Text_To_Speech ) {
-			$capabilities[] = AI_Capability::TEXT_TO_SPEECH;
 		}
 		if ( $model instanceof With_Web_Search ) {
 			$capabilities[] = AI_Capability::WEB_SEARCH;

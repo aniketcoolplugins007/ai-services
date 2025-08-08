@@ -86,12 +86,10 @@ class Google_AI_Service extends Abstract_AI_Service implements With_API_Client {
 		}
 
 		$gemini_legacy_capabilities = array(
-			AI_Capability::CHAT_HISTORY,
 			AI_Capability::FUNCTION_CALLING,
 			AI_Capability::TEXT_GENERATION,
 		);
 		$gemini_capabilities        = array(
-			AI_Capability::CHAT_HISTORY,
 			AI_Capability::FUNCTION_CALLING,
 			AI_Capability::MULTIMODAL_INPUT,
 			AI_Capability::TEXT_GENERATION,

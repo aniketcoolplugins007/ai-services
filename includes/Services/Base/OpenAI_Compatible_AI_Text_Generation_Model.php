@@ -37,10 +37,9 @@ use InvalidArgumentException;
  *
  * @since 0.7.0
  */
-class OpenAI_Compatible_AI_Text_Generation_Model extends Abstract_AI_Model implements With_API_Client, With_Text_Generation, With_Chat_History {
+class OpenAI_Compatible_AI_Text_Generation_Model extends Abstract_AI_Model implements With_API_Client, With_Text_Generation {
 	use With_API_Client_Trait;
 	use With_Text_Generation_Trait;
-	use With_Chat_History_Trait;
 	use Model_Param_Text_Generation_Config_Trait;
 	use Model_Param_System_Instruction_Trait;
 
