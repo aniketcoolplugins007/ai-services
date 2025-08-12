@@ -22,7 +22,6 @@ class ComposerAutoloaderInitbc1deb2b22c4ca7c275d5ddecbf30620
             return self::$loader;
         }
 
-
         require __DIR__ . '/platform_check.php';
 
         spl_autoload_register(array('ComposerAutoloaderInitbc1deb2b22c4ca7c275d5ddecbf30620', 'loadClassLoader'), true, true);
